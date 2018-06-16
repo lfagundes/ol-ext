@@ -108,7 +108,7 @@ ol_interaction_DrawHole.prototype._startDrawing = function(e)
 {	var map = this.getMap();
 	var layersFilter = this.layers_;
 	this._feature = e.feature;
-	coord = e.feature.getGeometry().getCoordinates()[0][0];
+	var coord = e.feature.getGeometry().getCoordinates()[0][0];
 	// Check object under the pointer
 	var features = map.getFeaturesAtPixel(
 		map.getPixelFromCoordinate(coord),
@@ -141,6 +141,10 @@ ol_interaction_DrawHole.prototype._startDrawing = function(e)
 ol_interaction_DrawHole.prototype._finishDrawing = function(e)
 {	var c = e.feature.getGeometry().getCoordinates()[0];
 	if (c.length > 3) this.getPolygon().getGeometry().appendLinearRing(new ol_geom_LinearRing(c));
+	// The feature is the hole
+	e.hole = e.feature;
+	// Get the current feature
+	e.feature = this.getPolygon();
 	this._feature = null;
 	this._select.getFeatures().clear();
 };
