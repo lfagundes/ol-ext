@@ -3,8 +3,8 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
 
 /** ol_control_Cloud adds an old map effect on a canvas renderer.
 * It colors the map, adds a parchment texture and compass onto the map. 
@@ -20,7 +20,7 @@ var ol_control_Cloud = function(options)
 
 	var div = document.createElement('div');
 	div.className = "ol-cloud ol-unselectable ol-control";
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: div
 	});
 
@@ -43,13 +43,13 @@ var ol_control_Cloud = function(options)
 
 };
 
-ol.inherits(ol_control_Cloud, ol_control_Control);
+inherits(ol_control_Cloud, Control);
 
 /**
  * Remove the control from its current map and attach it to the new map.
  * Subclasses may set up event handlers to get notified about changes to
  * the map here.
- * @param {_ol_Map_} map Map.
+ * @param {ol.PluggableMap} map Map.
  * @api stable
  */
 ol_control_Cloud.prototype.setMap = function (map)
@@ -57,7 +57,7 @@ ol_control_Cloud.prototype.setMap = function (map)
 	{	this.getMap().un('postcompose', this.drawCloud_, this);
 	}
 
-	ol_control_Control.prototype.setMap.call(this, map);
+	Control.prototype.setMap.call(this, map);
 
 	if (map) 
 	{	map.on('postcompose', this.drawCloud_, this);

@@ -3,10 +3,10 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Attribution from 'ol/control/attribution'
-import ol_style_Style from 'ol/style/style'
-import ol_color from 'ol/color'
+import {inherits} from 'ol/index'
+import Attribution from 'ol/control/attribution'
+import Style from 'ol/style/style'
+import {asString} from 'ol/color'
 import ol_control_ScaleLine from 'ol/control/scaleline'
 
 /**
@@ -15,23 +15,23 @@ import ol_control_ScaleLine from 'ol/control/scaleline'
  * @see http://www.kreidefossilien.de/webgis/dokumentation/beispiele/export-map-to-png-with-scale
  *
  * @constructor
- * @extends {ol_control_Attribution}
- * @param {Object=} options extend the ol_control_Attribution options.
- * 	@param {ol_style_Style} options.style  option is usesd to draw the text.
+ * @extends {Attribution}
+ * @param {Object=} options extend the Attribution options.
+ * 	@param {Style} options.style  option is usesd to draw the text.
  */
 var ol_control_CanvasAttribution = function(options)
 {	if (!options) options = {};
-	ol_control_Attribution.call(this, options);
+	Attribution.call(this, options);
 
 	// Draw in canvas
 	this.isCanvas_ = !!options.canvas;
 
 	// Get style options
 	if (!options) options={};
-	if (!options.style) options.style = new ol_style_Style();
+	if (!options.style) options.style = new Style();
 	this.setStyle (options.style);
 }
-ol.inherits(ol_control_CanvasAttribution, ol_control_Attribution);
+inherits(ol_control_CanvasAttribution, Attribution);
 
 /**
  * Draw attribution on canvas
@@ -45,15 +45,15 @@ ol_control_CanvasAttribution.prototype.setCanvas = function (b)
 
 /**
  * Change the control style
- * @param {ol_style_Style} style
+ * @param {Style} style
  */
 ol_control_CanvasAttribution.prototype.setStyle = function (style)
 {	var text = style.getText();
 	this.font_ = text ? text.getFont() : "10px Arial";
 	var stroke = text ? text.getStroke() : null;
 	var fill = text ? text.getFill() : null;
-	this.fontStrokeStyle_ = stroke ? ol_color.asString(stroke.getColor()) : "#fff";
-	this.fontFillStyle_ = fill ? ol_color.asString(fill.getColor()) : "#000";
+	this.fontStrokeStyle_ = stroke ? asString(stroke.getColor()) : "#fff";
+	this.fontFillStyle_ = fill ? asString(fill.getColor()) : "#000";
 	this.fontStrokeWidth_ = stroke ? stroke.getWidth() : 3;
 	if (this.getMap()) this.getMap().render();
 };
@@ -62,7 +62,7 @@ ol_control_CanvasAttribution.prototype.setStyle = function (style)
  * Remove the control from its current map and attach it to the new map.
  * Subclasses may set up event handlers to get notified about changes to
  * the map here.
- * @param {ol.Map} map Map.
+ * @param {ol.PluggableMap} map Map.
  * @api stable
  */
 ol_control_CanvasAttribution.prototype.setMap = function (map)

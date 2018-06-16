@@ -2,8 +2,8 @@
 	released under the CeCILL-B license (French BSD license)
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
-import ol from 'ol'
-import ol_proj from 'ol/proj'
+import {inherits} from 'ol/index'
+import {transform} from 'ol/proj'
 import ol_control_SearchPhoton from "./SearchPhoton";
 
 /**
@@ -12,7 +12,7 @@ import ol_control_SearchPhoton from "./SearchPhoton";
  * @constructor
  * @extends {ol.control.Search}
  * @fires select
- * @param {Object=} Control options.
+ * @param {Object=} options Control .
  *	@param {string} options.className control class name
  *	@param {Element | string | undefined} options.target Specify a target if you want the control to be rendered outside of the map's viewport.
  *	@param {string | undefined} options.label Text label to use for the search button, default "search"
@@ -33,7 +33,7 @@ var ol_control_SearchBAN = function(options)
     ol_control_SearchPhoton.call(this, options);
     this.set("copy","<a href='https://adresse.data.gouv.fr/' target='new'>&copy; BAN-data.gouv.fr</a>");
 };
-ol.inherits(ol_control_SearchBAN, ol_control_SearchPhoton);
+inherits(ol_control_SearchBAN, ol_control_SearchPhoton);
 
 /** Returns the text to be displayed in the menu
  *	@param {ol.Feature} f the feature
@@ -53,7 +53,7 @@ ol_control_SearchBAN.prototype.select = function (f){
     var c = f.geometry.coordinates;
     // Add coordinate to the event
     try {
-        c = ol_proj.transform (f.geometry.coordinates, 'EPSG:4326', this.getMap().getView().getProjection());
+        c = transform (f.geometry.coordinates, 'EPSG:4326', this.getMap().getView().getProjection());
     } catch(e) {};
     this.dispatchEvent({ type:"select", search:f, coordinate: c });
 };

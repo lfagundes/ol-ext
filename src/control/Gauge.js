@@ -3,13 +3,13 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
 
 /** A simple gauge control to display level information on the map.
  *
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @param {Object=} options Control options.
  *		@param {String} options.className class of the control
  *		@param {String} options.title title of the control
@@ -22,7 +22,7 @@ var ol_control_Gauge = function(options)
 	this.title_ = $("<span>").appendTo(element);
 	this.gauge_ = $("<button>").attr('type','button').appendTo($("<div>").appendTo(element)).width(0);
 	
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: element.get(0),
 		target: options.target
 	});
@@ -31,7 +31,7 @@ var ol_control_Gauge = function(options)
 	this.val(options.val);
 	this.set("max", options.max||100);
 };
-ol.inherits(ol_control_Gauge, ol_control_Control);
+inherits(ol_control_Gauge, Control);
 
 /** Set the control title
 * @param {string} title

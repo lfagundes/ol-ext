@@ -1,11 +1,11 @@
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
 
 /** Bookmark positions on ol maps.
  *
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @fires add
  * @fires remove
  * @param {} options Geobookmark's options
@@ -71,7 +71,7 @@ var ol_control_GeoBookmark = function(options) {
   menu.appendChild(input);
 
   // Init
-  ol_control_Control.call(this, {
+  Control.call(this, {
     element: element,
     target: options.target
   });
@@ -92,7 +92,7 @@ var ol_control_GeoBookmark = function(options) {
   // Set default bmark
   this.setBookmarks(localStorage[this.get('namespace')+"@bookmark"] ? null:options.marks);
 };
-ol.inherits(ol_control_GeoBookmark, ol_control_Control);
+inherits(ol_control_GeoBookmark, Control);
 
 /** Set bookmarks
 * @param {} bmark a list of bookmarks, default retreave in the localstorage
@@ -157,7 +157,7 @@ ol_control_GeoBookmark.prototype.removeBookmark = function(name) {
 
 /** Add a new Geo bookmark (replace existing one if any)
 * @param {string} name name of the bookmark (display in the menu)
-* @param {_ol_coordinate_} position default current position
+* @param {Coordinates} position default current position
 * @param {number} zoom default current map zoom
 * @param {bool} permanent prevent from deletion, default false
 */

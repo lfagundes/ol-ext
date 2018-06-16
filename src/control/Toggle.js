@@ -3,15 +3,15 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
+import {inherits} from 'ol/index'
 import ol_control_Button from './Button'
-import ol_control_Control from 'ol/control/control'
+import Control from 'ol/control/control'
 
 /** A simple toggle control
  * The control can be created with an interaction to control its activation.
  *
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @fires change:active, change:disable
  * @param {Object=} options Control options.
  *		className {String} class of the control
@@ -55,12 +55,12 @@ var ol_control_Toggle = function(options)
 	this.setActive (options.active);
 	this.setDisable (options.disable);
 };
-ol.inherits(ol_control_Toggle, ol_control_Button);
+inherits(ol_control_Toggle, ol_control_Button);
 
 /**
  * Set the map instance the control is associated with
  * and add interaction attached to it to this map.
- * @param {_ol_Map_} map The map instance.
+ * @param {PluggableMap} map The map instance.
  */
 ol_control_Toggle.prototype.setMap = function(map)
 {	if (!map && this.getMap())
@@ -70,7 +70,7 @@ ol_control_Toggle.prototype.setMap = function(map)
 		if (this.subbar_) this.getMap().removeControl (this.subbar_);
 	}
 
-	ol_control_Control.prototype.setMap.call(this, map);
+	Control.prototype.setMap.call(this, map);
 
 	if (map)
 	{	if (this.interaction_) map.addInteraction (this.interaction_);
@@ -135,14 +135,14 @@ ol_control_Toggle.prototype.setActive = function(b)
 };
 
 /** Set the control interaction
-* @param {_ol_interaction_} i interaction to associate with the control
+* @param {Intersection} i interaction to associate with the control
 */
 ol_control_Toggle.prototype.setInteraction = function(i)
 {	this.interaction_ = i;
 };
 
 /** Get the control interaction
-* @return {_ol_interaction_} interaction associated with the control
+* @return {Intersection} interaction associated with the control
 */
 ol_control_Toggle.prototype.getInteraction = function()
 {	return this.interaction_;

@@ -3,21 +3,21 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
 
 /** Control bar for OL3
  * The control bar is a container for other controls. It can be used to create toolbars.
  * Control bars can be nested and combined with ol.control.Toggle to handle activate/deactivate.
  *
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @param {Object=} options Control options.
  *	@param {String} options.className class of the control
  *	@param {bool} options.group is a group, default false
  *	@param {bool} options.toggleOne only one toggle control is active at a time, default false
  *	@param {bool} options.autoDeactivate used with subbar to deactivate all control when top level control deactivate, default false
- *	@param {Array<_ol_control_>} options.controls a list of control to add to the bar
+ *	@param {Array<Control>} options.controls a list of control to add to the bar
  */
 var ol_control_Bar = function(options)
 {	if (!options) options={};
@@ -25,7 +25,7 @@ var ol_control_Bar = function(options)
 	if (options.className) element.addClass(options.className);
 	if (options.group) element.addClass('ol-group');
 
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: element.get(0),
 		target: options.target
 	});
@@ -40,11 +40,11 @@ var ol_control_Bar = function(options)
 		}
 	}
 };
-ol.inherits(ol_control_Bar, ol_control_Control);
+inherits(ol_control_Bar, Control);
 
 /** Set the control visibility
-* @param {boolean} b
-*/
+ * @param {boolean} val
+ */
 ol_control_Bar.prototype.setVisible = function (val) {
 	if (val) $(this.element).show();
 	else $(this.element).hide();
@@ -60,10 +60,10 @@ ol_control_Bar.prototype.getVisible = function ()
 /**
  * Set the map instance the control is associated with
  * and add its controls associated to this map.
- * @param {_ol_Map_} map The map instance.
+ * @param {ol.Map} map The map instance.
  */
 ol_control_Bar.prototype.setMap = function (map)
-{	ol_control_Control.prototype.setMap.call(this, map);
+{	Control.prototype.setMap.call(this, map);
 
 	for (var i=0; i<this.controls_.length; i++)
 	{	var c = this.controls_[i];
@@ -73,7 +73,7 @@ ol_control_Bar.prototype.setMap = function (map)
 };
 
 /** Get controls in the panel
-*	@param {Array<_ol_control_>}
+*	@return {Array<Control>}
 */
 ol_control_Bar.prototype.getControls = function ()
 {	return this.controls_;
@@ -99,7 +99,7 @@ ol_control_Bar.prototype.setPosition = function (pos)
 };
 
 /** Add a control to the bar
-*	@param {_ol_control_} c control to add
+*	@param {Control} c control to add
 */
 ol_control_Bar.prototype.addControl = function (c)
 {	this.controls_.push(c);
@@ -115,7 +115,7 @@ ol_control_Bar.prototype.addControl = function (c)
 };
 
 /** Deativate all controls in a bar
-* @param {_ol_control_} except a control
+* @param {Control} except a control
 */
 ol_control_Bar.prototype.deactivateControls = function (except)
 {	for (var i=0; i<this.controls_.length; i++)

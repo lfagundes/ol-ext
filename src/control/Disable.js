@@ -1,11 +1,11 @@
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
 
 /** A simple control to disable all actions on the map.
  * The control will create an invisible div over the map.
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @param {Object=} options Control options.
  *		@param {String} options.class class of the control
  *		@param {String} options.html html code to insert in the control
@@ -13,15 +13,15 @@ import ol_control_Control from 'ol/control/control'
  *		@param {function} options.toggleFn callback when control is clicked 
  */
 var ol_control_Disable = function(options)
-{	var options = options||{};
-	var element = $("<div>").addClass((options.calssName||"")+' ol-disable ol-unselectable ol-control');
+{	var opt = options||{};
+	var element = $("<div>").addClass((opt.className||"")+' ol-disable ol-unselectable ol-control');
 	element.css({ top:0, left:0, right:0, bottom:0, "z-index":10000, background:"none", display:"none" });
 
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: element.get(0)
 	});
 }
-ol.inherits(ol_control_Disable, ol_control_Control);
+inherits(ol_control_Disable, Control);
 
 /** Test if the control is on
  * @return {bool}

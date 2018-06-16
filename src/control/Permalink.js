@@ -3,9 +3,9 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
-import ol_proj from 'ol/proj'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
+import {transform} from 'ol/proj'
 
 /**
  * Permalink Control.    
@@ -15,8 +15,8 @@ import ol_proj from 'ol/proj'
  *	The control must be added after all layer are inserted in the map to take them into acount.
  *
  * @constructor
- * @extends {ol_control_Control}
- * @param {Object=} options
+ * @extends {Control}
+ * @param {Object=} opt_options
  *	@param {bool} options.urlReplace replace url or not, default true
  *	@param {integer} options.fixed number of digit in coords, default 6
  *	@param {bool} options.anchor use "#" instead of "?" in href
@@ -42,7 +42,7 @@ var ol_control_Permalink = function(opt_options)
     element.className = (options.className || "ol-permalink") + " ol-unselectable ol-control";
     element.appendChild(button);
     
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: element,
 		target: options.target
 	});
@@ -70,11 +70,11 @@ var ol_control_Permalink = function(opt_options)
 	// Decode permalink
 	this.setPosition();
 };
-ol.inherits(ol_control_Permalink, ol_control_Control);
+inherits(ol_control_Permalink, Control);
 
 /**
  * Set the map instance the control associated with.
- * @param {ol.Map} map The map instance.
+ * @param {PluggableMap} map The map instance.
  */
 ol_control_Permalink.prototype.setMap = function(map)
 {   if (this.getMap())
@@ -82,7 +82,7 @@ ol_control_Permalink.prototype.setMap = function(map)
 		this.getMap().un('moveend', this.viewChange_, this);
 	}
 
-	ol_control_Control.prototype.setMap.call(this, map);
+	Control.prototype.setMap.call(this, map);
 	
 	// Get change 
 	if (map) 
@@ -125,7 +125,7 @@ ol_control_Permalink.prototype.setPosition = function()
 	{	var t = hash[i].split("=");
 		param[t[0]] = t[1];
 	}
-	var c = ol_proj.transform([Number(param.lon),Number(param.lat)], 'EPSG:4326', map.getView().getProjection());
+	var c = transform([Number(param.lon),Number(param.lat)], 'EPSG:4326', map.getView().getProjection());
 	if (c[0] && c[1]) map.getView().setCenter(c);
 	if (param.z) map.getView().setZoom(Number(param.z));
 	if (param.r) map.getView().setRotation(Number(param.r));
@@ -176,7 +176,7 @@ ol_control_Permalink.prototype.getUrlParams = function()
  */
 ol_control_Permalink.prototype.getLink = function()
 {	var map = this.getMap();
-	var c = ol_proj.transform(map.getView().getCenter(), map.getView().getProjection(), 'EPSG:4326');
+	var c = transform(map.getView().getCenter(), map.getView().getProjection(), 'EPSG:4326');
 	var z = map.getView().getZoom();
 	var r = map.getView().getRotation();
 	var l = this.layerStr_;

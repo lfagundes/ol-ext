@@ -3,24 +3,24 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
-import ol_color from 'ol/color'
-import ol_style_Style from 'ol/style/style'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
+import {asString} from 'ol/color'
+import Style from 'ol/style/style'
 
 /**
  * OpenLayers 3 Title Control integrated in the canvas (for jpeg/png export purposes).
  *
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @param {Object=} options extend the ol.control options. 
- * 	@param {ol_style_Style} options.style style usesd to draw the title.
+ * 	@param {Style} options.style style usesd to draw the title.
  */
 var ol_control_CanvasTitle = function(options)
 {	if (!options) options={};
 	
 	// Get style options
-	if (!options.style) options.style = new ol_style_Style();
+	if (!options.style) options.style = new Style();
 	this.setStyle(options.style);
 
 	// Initialize parent
@@ -34,25 +34,25 @@ var ol_control_CanvasTitle = function(options)
 					visibility: 'hidden'
 				});
 
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: elt.get(0),
 		target: options.target
 	});
 }
-ol.inherits(ol_control_CanvasTitle, ol_control_Control);
+inherits(ol_control_CanvasTitle, Control);
 
 /**
  * Remove the control from its current map and attach it to the new map.
  * Subclasses may set up event handlers to get notified about changes to
  * the map here.
- * @param {_ol_Map_} map Map.
+ * @param {ol.PluggableMap} map Map.
  * @api stable
  */
 ol_control_CanvasTitle.prototype.setMap = function (map)
 {	var oldmap = this.getMap();
 	if (oldmap) oldmap.un('postcompose', this.drawTitle_, this);
 	
-	ol_control_Control.prototype.setMap.call(this, map);
+	Control.prototype.setMap.call(this, map);
 	if (oldmap) oldmap.renderSync();
 
 	// Get change (new layer added or removed)
@@ -62,7 +62,7 @@ ol_control_CanvasTitle.prototype.setMap = function (map)
 
 /**
  * Change the control style
- * @param {ol_style_Style} style
+ * @param {Style} style
  */
 ol_control_CanvasTitle.prototype.setStyle = function (style)
 {	var text = style.getText();
@@ -70,8 +70,8 @@ ol_control_CanvasTitle.prototype.setStyle = function (style)
 	this.text_ = text ? text.getText() : "";
 	var stroke = text ? text.getStroke() : null;
 	var fill = text ? text.getFill() : null;
-	this.strokeStyle_ = stroke ? ol_color.asString(stroke.getColor()) : "#fff";
-	this.fillStyle_ = fill ? ol_color.asString(fill.getColor()) : "#000";
+	this.strokeStyle_ = stroke ? asString(stroke.getColor()) : "#fff";
+	this.fillStyle_ = fill ? asString(fill.getColor()) : "#000";
 	if (this.element) 
 	{	$(this.element).text(this.text_).css ({font: this.font_});
 	}
@@ -81,7 +81,7 @@ ol_control_CanvasTitle.prototype.setStyle = function (style)
 
 /**
  * Set the map title 
- * @param {string} map title.
+ * @param {string} title map-title .
  * @api stable
  */
 ol_control_CanvasTitle.prototype.setTitle = function (title)
@@ -92,7 +92,7 @@ ol_control_CanvasTitle.prototype.setTitle = function (title)
 
 /**
  * Get the map title 
- * @param {string} map title.
+ * @param {string} title map-title .
  * @api stable
  */
 ol_control_CanvasTitle.prototype.getTitle = function (title)

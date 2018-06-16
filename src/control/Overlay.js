@@ -3,14 +3,14 @@
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 */
 
-import ol from 'ol'
-import ol_control_Control from 'ol/control/control'
+import {inherits} from 'ol/index'
+import Control from 'ol/control/control'
 
-/** Control overlay for OL3
+/** Control overlay for ol-ext
  * The overlay control is a control that display an overlay over the map
  *
  * @constructor
- * @extends {ol_control_Control}
+ * @extends {Control}
  * @fire change:visible
  * @param {Object=} options Control options.
  *	- className {String} class of the control
@@ -23,7 +23,7 @@ var ol_control_Overlay = function(options)
 	var element = $("<div>").addClass('ol-unselectable ol-overlay');
 	if (options.className) element.addClass(options.className);
 	
-	ol_control_Control.call(this,
+	Control.call(this,
 	{	element: element.get(0),
 		target: options.target
 	});
@@ -36,7 +36,7 @@ var ol_control_Overlay = function(options)
 	this._timeout = false;
 	this.setContent (options.content);
 };
-ol.inherits(ol_control_Overlay, ol_control_Control);
+inherits(ol_control_Overlay, Control);
 
 /** Set the content of the overlay
 * @param {string} html the html to display in the control (or a jQuery object) 
